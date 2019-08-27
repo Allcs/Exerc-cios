@@ -1,2 +1,2 @@
-# lucasjorge1-repositorio
-script Senai Manha
+# Script SENAI Manhã
+script de configuração do SW
