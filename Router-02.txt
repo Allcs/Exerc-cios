@@ -1,0 +1,52 @@
+enable
+configure terminal
+hostname RT-02
+banner motd "APENAS PARA O PESSOAL DO TI"
+enable secret SenhadaEnable
+ip domain-name rede2.local
+crypto key generate rsa general-keys modulus 1024
+username allcs privilege 15 secret Riddlers
+username estagiario privilege 1 secret senhaburro
+line console 0
+password SenhadaConsole
+login
+exit
+line vty 0 15
+transport input ssh
+login local
+exec-timeout 10
+exit
+login block-for 60 attempts 3 within 60
+security passwords min-length 8 
+interface Serial 0/0/0
+ip address 201.187.89.9 255.255.255.252
+description REDE 201.187.89.8
+no shutdown
+exit
+interface Serial 0/0/1
+ip address 201.187.89.17 255.255.255.252
+description REDE 201.187.89.16
+no shutdown
+exit
+interface Serial 0/1/1
+ip address 201.187.89.6 255.255.255.252
+description REDE 201.187.89.4
+no shutdown
+exit
+interface GigabitEthernet 0/1
+no shutdown
+description REDE 10.0.0.0 
+exit
+interface GigabitEthernet 0/1.50
+encapsulation dot1q 50
+ip address 10.0.0.1 255.255.128.0
+interface GigabitEthernet 0/1.60
+encapsulation dot1q 60
+ip address 10.0.128.1 255.255.224.0
+interface GigabitEthernet 0/1.70
+encapsulation dot1q 70
+ip address 10.0.160.1 255.255.252.0
+interface GigabitEthernet 0/1.80
+encapsulation dot1q 80
+ip address 10.0.164.1 255.255.255.0
+do wr
