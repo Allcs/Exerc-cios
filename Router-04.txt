@@ -1,0 +1,56 @@
+enable
+configure terminal
+hostname RT-04
+banner motd "ACESSO APENAS PARA O PESSOAL DO TI"
+enable secret SenhadaEnable
+service password-encryption
+ip domain-name REDE4.Local
+crypto key generate rsa general-key modulus 1024
+username allcs privilege 15 secret Riddlers
+username estagiario privilege 1 secret senhaburro
+login block-for 180 attempts 3 within 60
+security passwords min-length 8
+line console 0
+password SenhadaConsole
+login
+exit
+line vty 0 15
+transport input ssh
+login local
+exec-timeout 5
+exit
+interface gigabitEthernet 0/1
+no shutdown
+exit
+interface serial 0/0/0
+ip address 201.187.89.2 255.255.255.252
+no shutdown
+description REDE 201.187.89.0 
+exit
+interface serial 0/0/1
+ip address 201.187.89.14 255.255.255.252
+no shutdown
+description REDE 201.187.89.12
+exit
+interface serial 0/1/1
+ip address 201.187.89.17 255.255.255.252
+no shutdown
+description REDE 201.187.89.16
+exit
+interface gigabitEthernet 0/1.88
+encapsulation dot1Q 88
+ip address 172.16.0.1 255.240.0.0
+description REDE 172.16.0.0
+exit
+interface gigabitEthernet 0/1.200
+encapsulation dot1Q 200
+ip address 172.24.0.1 255.255.192.0
+description REDE 172.26.0.0
+exit
+interface gigabitEthernet 0/1.90
+encapsulation dot1Q 90
+ip address 172.48.0.1 255.255.255.0
+description REDE 172.26.64.0
+exit
+do wr
+

@@ -1,0 +1,55 @@
+enable
+configure terminal
+hostname SW-01
+banner motd "ACESSO APENAS PARA O PESSOAL DO TI"
+enable secret SenhadaEnable
+service password-encryption
+ip domain-name Rede1.Local
+crypto key generate rsa general-key modulus 1024
+username administrador privilege 15 secret Riddlers
+username estagiario privilege 1 secret senhaburro
+line console 0
+password SenhadaConsole
+login
+exit
+line vty 0 15
+transport input ssh
+login local
+exec-timeout 5
+exit
+vlan 10
+name TESTES
+exit
+vlan 20
+name TELEMARKETING
+exit
+vlan 30
+name CONSULTORES
+exit
+interface gigabitEthernet 0/1
+switchport mode trunk
+switchport trunk native vlan 88
+no shutdown
+exit
+interface vlan 88
+ip address 192.168.31.254 255.255.224.0
+description INTERFACE DE GERENCIAMENTO REDE 1
+exit
+ip default-gateway 192.168.0.1
+interface range FastEthernet 0/1 -9
+switchport mode access
+switchport access vlan 10
+exit
+interface range fastEthernet 0/10 -17 
+switchport mode access
+switchport access vlan 20
+exit
+interface range fastEthernet 0/18,FastEthernet 0/22,FastEthernet 0/24
+switchport mode access
+switchport access vlan 30
+exit
+interface range fastEthernet 0/19,FastEthernet 0/20,FastEthernet 0/21, FastEthernet 0/23
+switchport mode access
+switchport access vlan 40
+exit
+do wr
