@@ -1,0 +1,79 @@
+enable
+configure terminal
+hostname SW-03
+banner motd "APENAS PARA O PESSOAL DO TI"
+enable secret SenhadaEnable
+ip domain-name rede3.local
+crypto key generate rsa general-keys modulus 1024
+username allcs privilege 15 secret Riddlers
+username estagiario privilege 1 secret senhaburro
+line console 0
+password SenhadaConsole
+login
+exit
+line vty 0 15
+transport input ssh
+login local
+exec-timeout 10
+exit
+login block-for 60 attempts 3 within 60
+security passwords min-length 8 
+interface vlan 88
+ip address 192.168.39.254 255.255.248.0
+no shutdown
+exit
+interface FastEthernet 0/1
+ip address 192.168.32.3 255.255.252.0
+description REDE Financas
+no shutdown
+exit
+interface FastEthernet 0/6
+ip address 192.168.36.3 255.255.254.0
+description REDE Operacoes
+no shutdown
+exit
+interface FastEthernet 0/10
+ip address 192.168.38.3 255.255.255.0
+description REDE Relogios
+no shutdown
+exit
+interface FastEthernet 0/20
+ip address 192.168.39.3 255.255.255.128
+description REDE Livre
+no shutdown
+exit
+interface vlan 80
+vlan 80
+name Financas
+exit
+interface vlan 60
+vlan 60
+name Operacoes
+exit
+interface vlan 88
+vlan 88
+name Relogios
+exit
+interface vlan 100
+vlan 100
+name Livre
+exit
+interface range fastEthernet 0/1 -5
+switchport mode access
+switchport access vlan 80
+exit
+interface range fastEthernet 0/6 -9
+switchport mode access
+switchport access vlan 60
+exit
+interface range FastEthernet 0/10 -19
+switchport mode access
+switchport access vlan 88
+exit
+interface FastEthernet 0/20 -24
+switchport mode access
+switchport access vlan 100
+exit
+ip default-gateway 192.168.32.1
+do wr
+
